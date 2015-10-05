@@ -1,10 +1,18 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(rowNumber) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
+
+    var imageWidth = 101;
+    var imageHeight = 171;
+    var rowHeight = 83;
+
+    this.x = 0;//-imageWidth;
+    this.y = (rowHeight/2 - imageHeight/2) * rowNumber;
+
     this.sprite = 'images/enemy-bug.png';
 };
 
@@ -20,6 +28,19 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
+var allEnemies = [];
+
+(function () {
+	var countOfEnemies = 1;
+
+	for(var i = 0; i < countOfEnemies; i++){
+		allEnemies.push(new Enemy(2));
+	}
+
+}());
+
+
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -42,5 +63,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    //player.handleInput(allowedKeys[e.keyCode]);
 });
