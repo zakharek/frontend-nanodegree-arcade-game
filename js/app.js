@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function(rowNumber) {
+var Enemy = function(rowNumber, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -7,11 +7,14 @@ var Enemy = function(rowNumber) {
     // a helper we've provided to easily load images
 
     var imageWidth = 101;
-    var imageHeight = 171;
+    var imageHeight = 80;
     var rowHeight = 83;
+    var rowHightAdjustment = 60;
 
-    this.x = 0;//-imageWidth;
-    this.y = (rowHeight/2 - imageHeight/2) * rowNumber;
+    this.x = -imageWidth;
+    this.y = (rowHeight/2 - imageHeight/2) + rowHeight * (rowNumber - 1) + rowHightAdjustment;
+    this.width = imageWidth;
+    this.speed = speed;
 
     this.sprite = 'images/enemy-bug.png';
 };
@@ -22,6 +25,14 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+
+    this.x = this.x + this.speed * dt;
+
+    if(this.x > ctx.canvas.width) this.reset();
+};
+
+Enemy.prototype.reset = function() {
+    this.x = -this.width;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -32,10 +43,10 @@ Enemy.prototype.render = function() {
 var allEnemies = [];
 
 (function () {
-	var countOfEnemies = 1;
+	var countOfEnemies = 3;
 
-	for(var i = 0; i < countOfEnemies; i++){
-		allEnemies.push(new Enemy(2));
+	for(var i = 1; i <= countOfEnemies; i++){
+		allEnemies.push(new Enemy(i, 200));
 	}
 
 }());
