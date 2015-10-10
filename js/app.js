@@ -1,5 +1,5 @@
 Math.randomBetween = function(min, max){
-    return Math.floor(Math.random()*(max-min+1)+min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 var Enemy = function(row) {
@@ -103,12 +103,28 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Player.prototype.move = function(direction) {
+    switch(direction) {
+    	case 'left':
+    		if(this.column > 1) this.column -= 1;
+    		break;
+		case 'up':
+			if(this.row > 1) this.row -= 1;
+    		break;
+		case 'right':
+			if(this.column < 5) this.column += 1;
+    		break;
+		case 'down':
+			if(this.row < 6) this.row += 1;
+    		break;
+		default:
+			return;
+    }
 
+    this.x = this.getX(this.column);
+    this.y = this.getY(this.row);
+};
 
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
 
 var allEnemies = [];
 var player = new Player(3,6);
@@ -126,20 +142,20 @@ var player = new Player(3,6);
 		if(row > maxRow) row = 1;
 	}
 
+	document.addEventListener('keyup', function(e) {
+	    var allowedKeys = {
+	        37: 'left',
+	        38: 'up',
+	        39: 'right',
+	        40: 'down'
+	    };
+
+	    player.move(allowedKeys[e.keyCode]);
+	});
+
 }());
 
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
 
-    //player.handleInput(allowedKeys[e.keyCode]);
-});
 
 
