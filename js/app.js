@@ -4,7 +4,7 @@ Math.randomBetween = function(min, max){
 
 var Enemy = function(row) {
 	//TODO: move all hardcoded values to configuration object
-    var imageWidth = 101;
+    var imageWidth = 95;
     this.sprite = 'images/enemy-bug.png';
 
     this.x = -imageWidth;
@@ -22,10 +22,10 @@ Enemy.prototype.getRandomSpeed = function(){
 Enemy.prototype.getY = function(row) {
 	//TODO: move all hardcoded values to configuration object
 	var imageHeight = 80,
-		rowHeight = 83,
-    	rowHightAdjustment = 60;
+		cellHeight = 83,
+    	cellHightAdjustment = 20;
 
-    return (rowHeight/2 - imageHeight/2) + rowHeight * (row - 1) + rowHightAdjustment;
+    return (cellHeight/2 - imageHeight/2) + cellHeight * (row - 1) - cellHightAdjustment;
 };
 
 Enemy.prototype.update = function(dt) {
@@ -49,11 +49,11 @@ Enemy.prototype.reset = function() {
     
 	do {
 		//TODO: move all hardcoded values to configuration object
-		row = Math.floor(Math.randomBetween(1, 3));
+		row = Math.floor(Math.randomBetween(2, 4));
 
 		enemiesOnSameRow = allEnemies.filter(function(enemy){ return enemy.row === row; }).length;
 		allEnemiesWillBeOnSameRow = (enemiesOnSameRow + 1) === allEnemies.length;
-	} while (allEnemiesWillBeOnSameRow);
+	} while (allEnemiesWillBeOnSameRow && allEnemies.length > 1);
 
 	this.x = -this.width;
     this.y = this.getY(row);
@@ -61,9 +61,19 @@ Enemy.prototype.reset = function() {
     this.speed = this.getRandomSpeed();
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+Enemy.prototype.collidesWith = function(player) {
+	var enemyHitAdjustmentX = this.width * 0.2,
+		enemyLeftSideX = this.x + enemyHitAdjustmentX,
+		enemyRightSideX = this.x +  this.width - enemyHitAdjustmentX,
+
+		playerHitAdjustmentX = player.width * 0.3,
+		playerLeftSideX = player.x + playerHitAdjustmentX,
+		playerRightSideX = player.x +  player.width - playerHitAdjustmentX;
+
+	if(this.row !== player.row) return;
+
+    return enemyRightSideX > playerLeftSideX && enemyLeftSideX < playerRightSideX;
+};
 
 var Player = function(column, row) {
 	//TODO: move all hardcoded values to configuration object
@@ -81,18 +91,18 @@ var Player = function(column, row) {
 Player.prototype.getX = function(column){
 	//TODO: move all hardcoded values to configuration object
 	var imageWidth = 101,
-		columnWidth = 101;
+		cellWidth = 101;
 
-    return (columnWidth/2 - imageWidth/2) + columnWidth * (column - 1);
+    return (cellWidth/2 - imageWidth/2) + cellWidth * (column - 1);
 }
 
 Player.prototype.getY = function(row){
 	//TODO: move all hardcoded values to configuration object
 	var imageHeight = 171,
-		rowHeight = 83,
-    	rowHightAdjustment = 10;
+		cellHeight = 83,
+    	cellHightAdjustment = 10;
 
-    return (rowHeight/2 - imageHeight/2) + rowHeight * (row - 1) + rowHightAdjustment;
+    return (cellHeight/2 - imageHeight/2) + cellHeight * (row - 1) + cellHightAdjustment;
 }
 
 Player.prototype.update = function() {
@@ -121,10 +131,18 @@ Player.prototype.move = function(direction) {
 			return;
     }
 
+    if(this.row === 1) this.reset();
+
     this.x = this.getX(this.column);
     this.y = this.getY(this.row);
 };
 
+Player.prototype.reset = function() {
+	this.column = 3;
+	this.row = 6;
+    this.x = this.getX(this.column);
+    this.y = this.getY(this.row);
+};
 
 var allEnemies = [];
 var player = new Player(3,6);
@@ -132,8 +150,8 @@ var player = new Player(3,6);
 (function () {
 
 	var countOfEnemies = 3,
-		row = 1,
-		maxRow = 3;
+		row = 2,
+		maxRow = 4;
 
 	for(var i = 0; i < countOfEnemies; i++){
 		allEnemies.push(new Enemy(row));
@@ -154,8 +172,3 @@ var player = new Player(3,6);
 	});
 
 }());
-
-
-
-
-
