@@ -80,7 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -94,7 +94,12 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+    }
+
+    function checkCollisions(){
+        allEnemies.forEach(function(enemy) {
+            if(enemy.collidesWith(player)) player.reset();
+        });
     }
 
     /* This function initially draws the "game level", it will then call
@@ -136,7 +141,6 @@ var Engine = (function(global) {
             }
         }
 
-
         renderEntities();
     }
 
@@ -174,6 +178,7 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png'
     ]);
+
     Resources.onReady(init);
 
     /* Assign the canvas' context object to the global variable (the window
