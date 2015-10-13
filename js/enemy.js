@@ -38,7 +38,6 @@ Enemy.prototype.reset = function() {
 		allEnemiesWillBeOnSameRow;
     
 	do {
-		//TODO: move all hardcoded values to configuration object
 		row = Math.floor(Math.randomBetween(this.config.game.enemyRow.from, this.config.game.enemyRow.to));
 
 		enemiesOnSameRow = allEnemies.filter(function(enemy){ return enemy.row === row; }).length;
@@ -55,7 +54,6 @@ Enemy.prototype.collidesWith = function(player) {
 	var enemyHitAdjustmentX = this.width * 0.3,
 		enemyLeftSideX = this.x + enemyHitAdjustmentX,
 		enemyRightSideX = this.x +  this.width - enemyHitAdjustmentX,
-
 		playerHitAdjustmentX = player.width * 0.35,
 		playerLeftSideX = player.x + playerHitAdjustmentX,
 		playerRightSideX = player.x +  player.width - playerHitAdjustmentX;

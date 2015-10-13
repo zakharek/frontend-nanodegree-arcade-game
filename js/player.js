@@ -10,7 +10,6 @@ var Player = function(config) {
     this.score = 0;
 };  
 
-
 Player.prototype.getX = function(column){
 	var cell = this.config.game.cell;
 	
@@ -22,10 +21,6 @@ Player.prototype.getY = function(row){
 	
     return (cell.height/2 - this.height/2) + cell.height * (row - 1) + cell.heightAdjustmentPlayer;
 }
-
-Player.prototype.update = function() {
-    
-};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
