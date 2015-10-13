@@ -1,32 +1,26 @@
-var Player = function(column, row) {
-	//TODO: move all hardcoded values to configuration object
-    var imageWidth = 101;
-    
-    //TODO: move all hardcoded values to configuration object
-    this.sprite = 'images/char-boy.png';
-    this.x = this.getX(column);
-    this.y = this.getY(row);
-    this.column = column;
-    this.row = row;
-    this.width = imageWidth;
+var Player = function(config) {
+	this.config = config;
+    this.width = config.sprite.width;
+    this.height = config.sprite.height;
+    this.sprite = config.sprite.url;
+    this.x = this.getX(config.defaultColumn);
+    this.y = this.getY(config.defaultRow);
+    this.column = config.defaultColumn;
+    this.row = config.defaultRow;
     this.score = 0;
-};
+};  
+
 
 Player.prototype.getX = function(column){
-	//TODO: move all hardcoded values to configuration object
-	var imageWidth = 101,
-		cellWidth = 101;
-
-    return (cellWidth/2 - imageWidth/2) + cellWidth * (column - 1);
+	var cell = this.config.game.cell;
+	
+    return (cell.width/2 - this.width/2) + cell.width * (column - 1);
 }
 
 Player.prototype.getY = function(row){
-	//TODO: move all hardcoded values to configuration object
-	var imageHeight = 171,
-		cellHeight = 83,
-    	cellHightAdjustment = 10;
-
-    return (cellHeight/2 - imageHeight/2) + cellHeight * (row - 1) + cellHightAdjustment;
+	var cell = this.config.game.cell;
+	
+    return (cell.height/2 - this.height/2) + cell.height * (row - 1) + cell.heightAdjustmentPlayer;
 }
 
 Player.prototype.update = function() {
@@ -64,8 +58,8 @@ Player.prototype.move = function(direction) {
 };
 
 Player.prototype.reset = function() {
-	this.column = 3;
-	this.row = 6;
+	this.column = this.config.defaultColumn;
+	this.row = this.config.defaultRow;
     this.x = this.getX(this.column);
     this.y = this.getY(this.row);
 };

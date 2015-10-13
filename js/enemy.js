@@ -15,7 +15,7 @@ Enemy.prototype.getRandomSpeed = function(){
 Enemy.prototype.getY = function(row) {
 	var cell = this.config.game.cell;
 
-    return (cell.height/2 - this.width/2) + cell.height * (row - 1) - cell.hightAdjustment;
+    return (cell.height/2 - this.width/2) + cell.height * (row - 1) - cell.heightAdjustment;
 };
 
 Enemy.prototype.update = function(dt) {
