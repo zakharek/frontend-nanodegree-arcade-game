@@ -1,42 +1,42 @@
 var Enemy = function(row, config) {
-    this.config = config;
-    this.width = config.sprite.width;
-    
-    this.x = -this.width;
-    this.y = this.getY(row);
-    this.row = row;
-    this.speed = this.getRandomSpeed();
+	this.config = config;
+	this.width = config.sprite.width;
+	
+	this.x = -this.width;
+	this.y = this.getY(row);
+	this.row = row;
+	this.speed = this.getRandomSpeed();
 };
 
 Enemy.prototype.getRandomSpeed = function(){
 	return Math.randomBetween(this.config.speed.min, this.config.speed.max);
-}
+};
 
 Enemy.prototype.getY = function(row) {
 	var cell = this.config.game.cell;
 
-    return (cell.height/2 - this.width/2) + cell.height * (row - 1) - cell.heightAdjustment;
+	return (cell.height/2 - this.width/2) + cell.height * (row - 1) - cell.heightAdjustment;
 };
 
 Enemy.prototype.update = function(dt) {
-    // Using dt to calculate x increment ensures the game runs at same speed on all computers
-    var xIncrement = this.speed * dt;
+	// Using dt to calculate x increment ensures the game runs at same speed on all computers
+	var xIncrement = this.speed * dt;
 
-    this.x += xIncrement;
+	this.x += xIncrement;
 
-    var enemyLeftScreen = this.x > ctx.canvas.width;
-    if(enemyLeftScreen) this.reset();
+	var enemyLeftScreen = this.x > ctx.canvas.width;
+	if(enemyLeftScreen) this.reset();
 };
 
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.config.sprite.url), this.x, this.y);
+	ctx.drawImage(Resources.get(this.config.sprite.url), this.x, this.y);
 };
 
 Enemy.prototype.reset = function() {
 	var row,
 		enemiesOnSameRow,
 		allEnemiesWillBeOnSameRow;
-    
+	
 	do {
 		row = Math.floor(Math.randomBetween(this.config.game.enemyRow.from, this.config.game.enemyRow.to));
 
@@ -45,9 +45,9 @@ Enemy.prototype.reset = function() {
 	} while (allEnemiesWillBeOnSameRow && allEnemies.length > 1);
 
 	this.x = -this.width;
-    this.y = this.getY(row);
-    this.row = row;
-    this.speed = this.getRandomSpeed();
+	this.y = this.getY(row);
+	this.row = row;
+	this.speed = this.getRandomSpeed();
 };
 
 Enemy.prototype.collidesWith = function(player) {
@@ -60,5 +60,5 @@ Enemy.prototype.collidesWith = function(player) {
 
 	if(this.row !== player.row) return false;
 
-    return enemyRightSideX > playerLeftSideX && enemyLeftSideX < playerRightSideX;
+	return enemyRightSideX > playerLeftSideX && enemyLeftSideX < playerRightSideX;
 };
